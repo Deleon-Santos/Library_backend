@@ -1,4 +1,4 @@
-from app.model.models import Autor, Livro, Usuario, Coleção
+from app.model.models import Autor, Livro, Usuario, Colecao
 
 from .config_db import Session
 
@@ -20,8 +20,8 @@ def seed_db():
         session.add_all([usuario1, usuario2])
         session.commit()    
 
-        coleção1 = Coleção(nome="Romance", usuario_id=usuario1.usuario_id)
-        coleção2 = Coleção(nome="Fantasia", usuario_id=usuario2.usuario_id)
+        coleção1 = Colecao(nome="Romance", usuario_id=usuario1.usuario_id)
+        coleção2 = Colecao(nome="Fantasia", usuario_id=usuario2.usuario_id)
         session.add_all([coleção1, coleção2])   
 
 

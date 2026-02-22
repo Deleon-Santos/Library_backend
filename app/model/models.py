@@ -5,9 +5,9 @@ from app.data.config_db import Base
 # 1. DEFINA A TABELA DE ASSOCIAÇÃO PRIMEIRO
 # Ela precisa existir no topo do arquivo para que as classes abaixo a conheçam.
 colecoes_livros = Table(
-    "coleções_livros", # Nome no Banco de Dados
+    "colecoes_livros", # Nome no Banco de Dados
     Base.metadata,
-    Column("coleção_id", Integer, ForeignKey("coleções.coleção_id"), primary_key=True),
+    Column("colecao_id", Integer, ForeignKey("colecoes.colecao_id"), primary_key=True),
     Column("livro_id", Integer, ForeignKey("livros.livro_id"), primary_key=True)
 )
 
@@ -22,7 +22,7 @@ class Livro(Base):
     autor = relationship("Autor", back_populates="livros")
     
     # 2. USE A VARIÁVEL colecoes_livros (sem aspas) aqui
-    coleções = relationship("Coleção", secondary=colecoes_livros, back_populates="livros")
+    colecoes = relationship("Colecao", secondary=colecoes_livros, back_populates="livros")
 
 
 class Autor(Base):
@@ -39,16 +39,16 @@ class Usuario(Base):
     email = Column(String, nullable=False)
     senha = Column(String, nullable=False)
     
-    coleções = relationship("Coleção", back_populates="usuario")
+    colecoes = relationship("Colecao", back_populates="usuario")
 
 
-class Coleção(Base):
-    __tablename__ = "coleções"
-    coleção_id = Column(Integer, primary_key=True, autoincrement=True)
+class Colecao(Base):
+    __tablename__ = "colecoes"
+    colecao_id = Column(Integer, primary_key=True, autoincrement=True)
     nome = Column(String, nullable=False)
     usuario_id = Column(Integer, ForeignKey("usuarios.usuario_id"), nullable=False)
     
-    usuario = relationship("Usuario", back_populates="coleções")
+    usuario = relationship("Usuario", back_populates="colecoes")
     
     # 3. USE A VARIÁVEL colecoes_livros aqui também
-    livros = relationship("Livro", secondary=colecoes_livros, back_populates="coleções")
+    livros = relationship("Livro", secondary=colecoes_livros, back_populates="colecoes")
