@@ -1,6 +1,6 @@
 from flask import Flask
 from flask_cors import CORS
-from app.model.models import Autor, Livro, Usuario, Colecao
+from app.model.models import Livro, Usuario, Colecao
 from app.controller.route import main
 from app.data.config_db import Base, engine
 from app.data.seed import seed_db
