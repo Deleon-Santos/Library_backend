@@ -1,6 +1,6 @@
 from flask import jsonify
 from app.data.config_db import Session
-from app.model.models import  Colecao
+from app.model.models import  Colecao, Usuario
 
 def adicionar_novo_livro(novo_favorito,colection_id):
     try:
@@ -24,7 +24,9 @@ def adicionar_novo_livro(novo_favorito,colection_id):
                     {
                         "id": livro.livro_id,
                         "titulo": livro.titulo,
-                        "descricao": livro.descricao
+                        "descricao": livro.descricao,
+                        "autor": livro.autor,
+                        "capa": livro.capa
                     }
                     for livro in colecao.livros
                 ]
@@ -48,7 +50,9 @@ def pegar_favoritos(id):
                     {
                         "id": livro.livro_id,
                         "titulo": livro.titulo,
-                        "descricao": livro.descricao
+                        "descricao": livro.descricao,
+                        "autor": livro.autor,
+                        "capa": livro.capa
                     }
                     for livro in colecao.livros
                 ]
@@ -69,5 +73,17 @@ def pegar_colections():
                 for colecao in colecoes
             ])
         
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    
+
+def autenticar_usuario(usuario):
+    try:
+        with Session() as session:
+            usuario_db = session.query(Usuario).filter_by(email=usuario.email, senha=usuario.senha).first()
+            if usuario_db:
+                return jsonify({"status": "ok", "usuario_id": usuario_db.usuario_id, "nome": usuario_db.nome})
+            else:
+                return jsonify({"error": "Credenciais inválidas"}), 401
     except Exception as e:
         return jsonify({"error": str(e)}), 500

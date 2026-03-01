@@ -18,6 +18,7 @@ class Livro(Base):
     ano = Column(Integer, nullable=False)
     descricao = Column(String, nullable=False)
     autor = Column(String, nullable=False)  
+    capa = Column(Integer, nullable=False)  # URL da capa do livro (opcional)
     
     colecoes = relationship("Colecao", secondary=colecoes_livros, back_populates="livros")
 
