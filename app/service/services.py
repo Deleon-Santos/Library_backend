@@ -87,3 +87,16 @@ def autenticar_usuario(usuario):
                 return jsonify({"error": "Credenciais inválidas"}), 401
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+    
+
+def novo_cadastro_usuario(novo_usuario):
+    try:
+        with Session() as session:
+            if session.query(Usuario).filter_by(email=novo_usuario.email).first():
+                return jsonify({"error": "Email já cadastrado"}), 400
+            session.add(novo_usuario)
+            session.commit()
+            session.refresh(novo_usuario)
+            return jsonify({"status": "ok", "usuario_id": novo_usuario.usuario_id, "nome": novo_usuario.nome})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500

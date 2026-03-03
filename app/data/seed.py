@@ -11,8 +11,8 @@ def seed_db():
         livro2 = Livro(titulo="A Guerra dos Tronos", ano=1996, descricao="O primeiro livro da série As Crônicas de Gelo e Fogo.", autor="George R.R. Martin", capa=7239832)
         session.add_all([livro1, livro2])       
 
-        usuario1 = Usuario(nome="Alice", email="alice@.com", senha="senha123")
-        usuario2 = Usuario(nome="Bob", email="bob@.com", senha="senha456")
+        usuario1 = Usuario(nome="Alice", email="alice@gmail.com", senha="senha123")
+        usuario2 = Usuario(nome="Bob", email="bob@gmail.com", senha="senha456")
         session.add_all([usuario1, usuario2])
         session.commit()    
 

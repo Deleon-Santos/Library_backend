@@ -1,8 +1,9 @@
 from flask import Blueprint, render_template, request
 from app.model.models import Livro, Usuario
-from app.service.services import  adicionar_novo_livro, autenticar_usuario, pegar_colections, pegar_favoritos
+from app.service.services import  adicionar_novo_livro, autenticar_usuario, novo_cadastro_usuario, pegar_colections, pegar_favoritos
 
 main = Blueprint("main", __name__)
+
 
 @main.route("/")
 def index():
@@ -11,10 +12,7 @@ def index():
 
 @main.route("/login", methods=["POST"])
 def login():
-
-    data = request.get_json()
-
-    
+    data = request.get_json()   
     usuario = Usuario(
         email=data["email"], 
         senha=data["senha"]
@@ -22,6 +20,15 @@ def login():
     return autenticar_usuario(usuario)
     
 
+@main.route("/cadastro", methods=["POST"])
+def cadastrar_usuaario():
+    data = request.get_json()
+    novo_usuario= Usuario(
+        name = data["name"],
+        email = data["email"],
+        senha = data["senha"]
+    )
+    return novo_cadastro_usuario(novo_usuario)
 
 
 @main.route("/add_favoritos/<int:colection_id>", methods=["POST"])
@@ -35,7 +42,6 @@ def add_favoritos(colection_id):
         autor=data["autor"],
         capa=data["capa"]
     )
-
     return adicionar_novo_livro(novo_favorito, colection_id)
 
 
