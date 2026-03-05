@@ -100,3 +100,16 @@ def novo_cadastro_usuario(novo_usuario):
             return jsonify({"status": "ok", "usuario_id": novo_usuario.usuario_id, "nome": novo_usuario.nome})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+    
+
+def criar_colecao(colecao):
+    try: 
+        with Session() as session:
+            if session.query(Colecao).filter_by(nome=colecao.nome).first():
+                return jsonify({"error": "Coleção já existe"}), 400
+            session.add (colecao)
+            session.commit()
+            session.refresh(colecao)
+            return jsonify({"status": "ok", "colecao_id": colecao.colecao_id, "nome": colecao.nome})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
