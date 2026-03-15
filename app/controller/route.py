@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request
 from app.model.models import Colecao, Livro, Usuario
-from app.service.services import  adicionar_novo_livro, autenticar_usuario, criar_colecao, novo_cadastro_usuario, pegar_colections, pegar_favoritos
+from app.service.services import  adicionar_novo_livro, autenticar_usuario, criar_colecao, excluir_colection, novo_cadastro_usuario, pegar_colections, pegar_favoritos
 
 main = Blueprint("main", __name__)
 
@@ -63,3 +63,9 @@ def criar_nova_colecao():
         usuario_id = data["usuario_id"] 
     )
     return criar_colecao(colecao)
+
+
+@main.route("/delete_colection<int:colection_id>", methods=["DELETE"])
+def delete_colecton(colection_id):
+    return excluir_colection(colection_id)
+
