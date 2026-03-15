@@ -65,7 +65,7 @@ def criar_nova_colecao():
     return criar_colecao(colecao)
 
 
-@main.route("/delete_colection<int:colection_id>", methods=["DELETE"])
-def delete_colecton(colection_id):
+@main.route("/delete_colection/<int:colection_id>", methods=["DELETE"])
+def delete_colection_route(colection_id):
     return excluir_colection(colection_id)
 

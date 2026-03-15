@@ -6,8 +6,8 @@ from app.data.config_db import Base
 colecoes_livros = Table(
     "colecoes_livros", # Nome no Banco de Dados
     Base.metadata,
-    Column("colecao_id", Integer, ForeignKey("colecoes.colecao_id"), primary_key=True,  ondelete="CASCADE"),
-    Column("livro_id", Integer, ForeignKey("livros.livro_id"), primary_key=True,  ondelete="CASCADE")
+    Column("colecao_id", Integer, ForeignKey("colecoes.colecao_id",ondelete="CASCADE"), primary_key=True ),
+    Column("livro_id", Integer, ForeignKey("livros.livro_id",  ondelete="CASCADE"), primary_key=True)
 )
 
 
