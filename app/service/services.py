@@ -117,11 +117,14 @@ def criar_colecao(colecao):
 
 def excluir_colection(colection_id):
     with Session() as session:
-        colecao= session.query(Colecao).filter_by(colecao_id=colection_id).first()
-        if not colecao:
-            return jsonify({"error": "Coleção não encontrada"}), 404
-        colecao.delete(colecao)
-        session.commit()
-        return jsonify({"ok": "Coleção removida!"}), 200
+        try:
+            colecao= session.query(Colecao).filter_by(colecao_id=colection_id).first()
+            if not colecao:
+                return jsonify({"error": "Coleção não encontrada"}), 404
+            colecao.delete(colecao)
+            session.commit()
+            return jsonify({"ok": "Coleção removida!"}), 200
+        except Exception as e:
+            return jsonify({f"error": str(e)}), 500
         
 

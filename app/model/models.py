@@ -6,8 +6,8 @@ from app.data.config_db import Base
 colecoes_livros = Table(
     "colecoes_livros", # Nome no Banco de Dados
     Base.metadata,
-    Column("colecao_id", Integer, ForeignKey("colecoes.colecao_id"), primary_key=True),
-    Column("livro_id", Integer, ForeignKey("livros.livro_id"), primary_key=True)
+    Column("colecao_id", Integer, ForeignKey("colecoes.colecao_id"), primary_key=True,  ondelete="CASCADE"),
+    Column("livro_id", Integer, ForeignKey("livros.livro_id"), primary_key=True,  ondelete="CASCADE")
 )
 
 
@@ -18,7 +18,7 @@ class Livro(Base):
     ano = Column(Integer, nullable=False)
     descricao = Column(String, nullable=False)
     autor = Column(String, nullable=False)  
-    capa = Column(Integer, nullable=False)  # URL da capa do livro (opcional)
+    capa = Column(Integer, nullable=True)  # URL da capa do livro (opcional)
     
     colecoes = relationship("Colecao", secondary=colecoes_livros, back_populates="livros")
 
