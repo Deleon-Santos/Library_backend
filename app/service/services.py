@@ -121,7 +121,7 @@ def excluir_colection(colection_id):
             colecao= session.query(Colecao).filter_by(colecao_id=colection_id).first()
             if not colecao:
                 return jsonify({"error": "Coleção não encontrada"}), 404
-            colecao.delete(colecao)
+            session.delete(colecao)
             session.commit()
             return jsonify({"ok": "Coleção removida!"}), 200
         except Exception as e:
