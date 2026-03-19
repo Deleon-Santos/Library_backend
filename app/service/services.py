@@ -1,19 +1,28 @@
+import bcrypt
 from flask import jsonify
 from app.data.config_db import Session
 from app.model.models import  Colecao, Usuario
+from flask_jwt_extended import create_access_token
 
-def adicionar_novo_livro(novo_favorito,colection_id):
+
+def adicionar_novo_livro(novo_favorito, colection_id, user_jwt):
     try:
         with Session() as session:
-            session.add(novo_favorito)
-            session.commit()
-            session.refresh(novo_favorito)
-        
-            colecao = session.query(Colecao).filter_by(colecao_id=colection_id).first()
+
+            # valida coleção antes de tudo
+            colecao = session.query(Colecao).filter_by(
+                colecao_id=colection_id,
+                usuario_id=user_jwt
+            ).first()
 
             if not colecao:
                 return jsonify({"error": "Coleção não encontrada"}), 404
-            colecao.livros.append(novo_favorito)
+
+            # associa corretamente
+            novo_favorito.colecao_id = colection_id
+
+            # salva tudo em uma única transação
+            session.add(novo_favorito)
             session.commit()
             session.refresh(novo_favorito)
 
@@ -30,7 +39,8 @@ def adicionar_novo_livro(novo_favorito,colection_id):
                     }
                     for livro in colecao.livros
                 ]
-            })
+            }), 201
+
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
@@ -80,11 +90,27 @@ def pegar_colections():
 def autenticar_usuario(usuario):
     try:
         with Session() as session:
-            usuario_db = session.query(Usuario).filter_by(email=usuario.email, senha=usuario.senha).first()
-            if usuario_db:
-                return jsonify({"status": "ok", "usuario_id": usuario_db.usuario_id, "nome": usuario_db.nome})
-            else:
+            usuario_db = session.query(Usuario).filter_by(email=usuario.email).first()
+
+            if not usuario_db:
                 return jsonify({"error": "Credenciais inválidas"}), 401
+            
+            senha_valida = bcrypt.checkpw(
+                usuario.senha.encode("utf-8"),
+                usuario_db.senha.encode("utf-8")
+            )
+
+            if not senha_valida:
+                return jsonify({"error": "Credenciais inválidas"}), 401
+
+            token = create_access_token(identity=usuario_db.usuario_id)
+            print(token)
+            return jsonify({"status": "ok", 
+                            "usuario_id": usuario_db.usuario_id, 
+                            "nome": usuario_db.nome,  
+                            "token": token}),200
+            
+                
     except Exception as e:
         return jsonify({"error": str(e)}), 500
     
@@ -125,6 +151,6 @@ def excluir_colection(colection_id):
             session.commit()
             return jsonify({"ok": "Coleção removida!"}), 200
         except Exception as e:
-            return jsonify({f"error": str(e)}), 500
+            return jsonify({"error": str(e)}), 500
         
 

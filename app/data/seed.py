@@ -1,6 +1,9 @@
 from app.model.models import  Livro, Usuario, Colecao
-
 from .config_db import Session
+from .hash_senha import gerar_hash_senha
+
+
+
 
 def seed_db():
     with Session()as session:
@@ -11,10 +14,20 @@ def seed_db():
         livro2 = Livro(titulo="A Guerra dos Tronos", ano=1996, descricao="O primeiro livro da série As Crônicas de Gelo e Fogo.", autor="George R.R. Martin", capa=7239832)
         session.add_all([livro1, livro2])       
 
-        usuario1 = Usuario(nome="Alice", email="alice@gmail.com", senha="senha123")
-        usuario2 = Usuario(nome="Bob", email="bob@gmail.com", senha="senha456")
+        usuario1 = Usuario(
+        nome="Alice",
+        email="alice@gmail.com",
+        senha=gerar_hash_senha("senha123")
+    )
+
+        usuario2 = Usuario(
+        nome="Bob",
+        email="bob@gmail.com",
+        senha=gerar_hash_senha("senha456")
+    )
+
         session.add_all([usuario1, usuario2])
-        session.commit()    
+        session.commit()
 
         coleção1 = Colecao(nome="Romance", usuario_id=usuario1.usuario_id)
         coleção2 = Colecao(nome="Fantasia", usuario_id=usuario2.usuario_id)
