@@ -104,11 +104,12 @@ def autenticar_usuario(usuario):
                 return jsonify({"error": "Credenciais inválidas"}), 401
 
             token = create_access_token(identity=usuario_db.usuario_id)
+            token = "Bearer " +token
             print(token)
             return jsonify({"status": "ok", 
                             "usuario_id": usuario_db.usuario_id, 
                             "nome": usuario_db.nome,  
-                            "token": token}),200
+                            "autorizacao": token}),200
             
                 
     except Exception as e:

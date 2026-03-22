@@ -44,9 +44,9 @@ def cadastrar_usuaario():
 @jwt_required()
 def add_favoritos(colection_id):
     user_jwt = get_jwt_identity()
-    
+    print(f"impressão dos dados auteticads do usuario {user_jwt}")
     data = request.get_json()
-    print(data)	
+    print(f"dados recebidos do fronte , {data}")	
     campos = ["titulo", "ano", "descricao", "autor", "capa"]
     if not all(campo in data for campo in campos):
         return jsonify({"error": "Dados incompletos"}), 400
@@ -72,11 +72,17 @@ def colections():
 
 
 @main.route("/nova_colecao", methods=["POST"])
+@jwt_required()
 def criar_nova_colecao():
+    user_jwt = get_jwt_identity()
+    if not user_jwt:
+        return jsonify({"erro":"Autor não indentificado"})
     data = request.get_json()
+    if not data["nome","usuario_id"]:
+        return jsonify({"erro":"Nome da coleção não foi informado"})
     colecao = Colecao(
         nome = data["nome"],
-        usuario_id = data["usuario_id"] 
+        usuario_id = user_jwt.id
     )
     return criar_colecao(colecao)
 
