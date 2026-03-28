@@ -8,21 +8,15 @@ from flask_jwt_extended import create_access_token
 def adicionar_novo_livro(novo_favorito, colection_id, user_jwt):
     try:
         with Session() as session:
-
-            # valida coleção antes de tudo
-            colecao = session.query(Colecao).filter_by(
-                colecao_id=colection_id,
-                usuario_id=user_jwt
-            ).first()
+            session.add(novo_favorito)
+            session.commit()
+            session.refresh(novo_favorito)
+        
+            colecao = session.query(Colecao).filter_by(colecao_id=colection_id, usuario_id=user_jwt).first()
 
             if not colecao:
                 return jsonify({"error": "Coleção não encontrada"}), 404
-
-            # associa corretamente
-            novo_favorito.colecao_id = colection_id
-
-            # salva tudo em uma única transação
-            session.add(novo_favorito)
+            colecao.livros.append(novo_favorito)
             session.commit()
             session.refresh(novo_favorito)
 
@@ -39,7 +33,7 @@ def adicionar_novo_livro(novo_favorito, colection_id, user_jwt):
                     }
                     for livro in colecao.livros
                 ]
-            }), 201
+            })
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
@@ -71,10 +65,10 @@ def pegar_favoritos(id):
         return jsonify({"error": str(e)}), 500
     
 
-def pegar_colections():
+def pegar_colections(user_jwt):
     try:
         with Session() as session:
-            colecoes = session.query(Colecao).all()
+            colecoes = session.query(Colecao).filter_by(usuario_id=user_jwt)
             return jsonify([
                 {
                     "id": colecao.colecao_id,
@@ -103,13 +97,14 @@ def autenticar_usuario(usuario):
             if not senha_valida:
                 return jsonify({"error": "Credenciais inválidas"}), 401
 
-            token = create_access_token(identity=usuario_db.usuario_id)
-            token = "Bearer " +token
-            print(token)
+            token = create_access_token(identity=str(usuario_db.usuario_id))
+            # token = "Bearer " +token
+            print(f"\nO token desta operação é {token}")
+
             return jsonify({"status": "ok", 
-                            "usuario_id": usuario_db.usuario_id, 
-                            "nome": usuario_db.nome,  
-                            "autorizacao": token}),200
+                            # "usuario_id": usuario_db.usuario_id, 
+                            # "nome": usuario_db.nome,  
+                            "Autorization":token}),200
             
                 
     except Exception as e:
@@ -142,10 +137,10 @@ def criar_colecao(colecao):
         return jsonify({"error": str(e)}), 500
     
 
-def excluir_colection(colection_id):
+def excluir_colection(colection_id, user_jwt):
     with Session() as session:
         try:
-            colecao= session.query(Colecao).filter_by(colecao_id=colection_id).first()
+            colecao= session.query(Colecao).filter_by(colecao_id=colection_id, usuario_id=user_jwt).first()
             if not colecao:
                 return jsonify({"error": "Coleção não encontrada"}), 404
             session.delete(colecao)

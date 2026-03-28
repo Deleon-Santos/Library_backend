@@ -43,10 +43,12 @@ def cadastrar_usuaario():
 @main.route("/add_favoritos/<int:colection_id>", methods=["POST"])
 @jwt_required()
 def add_favoritos(colection_id):
-    user_jwt = get_jwt_identity()
+    user_jwt = int(get_jwt_identity())
     print(f"impressão dos dados auteticads do usuario {user_jwt}")
+    
     data = request.get_json()
-    print(f"dados recebidos do fronte , {data}")	
+    print(f"dados recebidos do fronte , {data}")
+    	
     campos = ["titulo", "ano", "descricao", "autor", "capa"]
     if not all(campo in data for campo in campos):
         return jsonify({"error": "Dados incompletos"}), 400
@@ -62,32 +64,48 @@ def add_favoritos(colection_id):
 
 
 @main.route("/mostrar_favoritos/<int:colection_id>", methods=["GET"])
+@jwt_required()
 def mostrar_favoritos(colection_id):
+    
+    user_jwt= int(get_jwt_identity())
+    if not user_jwt:
+        return jsonify({
+        "error": "Token inválido ou mal formatado"
+        
+    }), 422
     return pegar_favoritos(colection_id)
 
 
 @main.route("/colections", methods=["GET"])
+@jwt_required()
 def colections():
-    return pegar_colections()
+    user_jwt = int(get_jwt_identity())
+    if not user_jwt:
+        return jsonify({"erro":"Autor não indentificado"}),401
+    return pegar_colections(user_jwt)
 
 
 @main.route("/nova_colecao", methods=["POST"])
 @jwt_required()
 def criar_nova_colecao():
-    user_jwt = get_jwt_identity()
+    user_jwt = int(get_jwt_identity())
     if not user_jwt:
-        return jsonify({"erro":"Autor não indentificado"})
+        return jsonify({"erro":"Autor não indentificado"}),401
     data = request.get_json()
-    if not data["nome","usuario_id"]:
+    if not data.get("nome",):
         return jsonify({"erro":"Nome da coleção não foi informado"})
     colecao = Colecao(
         nome = data["nome"],
-        usuario_id = user_jwt.id
+        usuario_id = user_jwt
     )
     return criar_colecao(colecao)
 
 
 @main.route("/delete_colection/<int:colection_id>", methods=["DELETE"])
+@jwt_required()
 def delete_colection_route(colection_id):
-    return excluir_colection(colection_id)
+    user_jwt = int(get_jwt_identity())
+    if not user_jwt:
+        return jsonify({"erro":"Autor não indentificado"}),401
+    return excluir_colection(colection_id, user_jwt)
 

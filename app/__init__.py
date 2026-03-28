@@ -1,10 +1,12 @@
-from flask import Flask
+from flask import Flask, json
 from flask_cors import CORS
 from app.model.models import Livro, Usuario, Colecao
 from app.controller.route import main
 from app.data.config_db import Base, engine
 from app.data.seed import seed_db
 from app.config_jwt import jwt
+from flasgger import Swagger
+
 
 def create_app():
     app = Flask(__name__)
@@ -13,6 +15,10 @@ def create_app():
 
     app.config["JWT_SECRET_KEY"] = "chave-super-secreta-que-nem-eu-mesmo-sei"
     jwt.init_app(app)
+    with open("./doc/swagger.json") as f:
+        swagger_template = json.load(f)
+
+    Swagger(app, template=swagger_template)
     
     CORS(
         app,
