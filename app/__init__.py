@@ -24,12 +24,16 @@ def create_app():
     CORS(
         app,
         resources={r"/*": {
-            "origins": [
-                "https://deleon-santos.github.io",
-                "http://127.0.0.1:5500",
-                "http://localhost:5500"
-            ]
+            "origins": "*"
+            # [
+            #     "https://deleon-santos.github.io",
+            #     "http://127.0.0.1:5500",
+            #     "http://localhost:5500",
+            #     "http://localhost:5000/apidocs/"
+            # ],
+            
         }},
+        
         supports_credentials=True
     )
     seed_db()

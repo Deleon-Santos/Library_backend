@@ -40,7 +40,7 @@ def cadastrar_usuaario():
     return novo_cadastro_usuario(novo_usuario)
 
 
-@main.route("/add_favoritos/<int:colection_id>", methods=["POST"])
+@main.route("/add_livro/<int:colection_id>", methods=["POST"])
 @jwt_required()
 def add_favoritos(colection_id):
     user_jwt = int(get_jwt_identity())
@@ -63,7 +63,7 @@ def add_favoritos(colection_id):
     return adicionar_novo_livro(novo_favorito, colection_id, user_jwt)
 
 
-@main.route("/mostrar_favoritos/<int:colection_id>", methods=["GET"])
+@main.route("/mostrar_livros/<int:colection_id>", methods=["GET"])
 @jwt_required()
 def mostrar_favoritos(colection_id):
     
@@ -76,7 +76,7 @@ def mostrar_favoritos(colection_id):
     return pegar_favoritos(colection_id)
 
 
-@main.route("/colections", methods=["GET"])
+@main.route("/mostrar_colecao", methods=["GET"])
 @jwt_required()
 def colections():
     user_jwt = int(get_jwt_identity())
@@ -101,7 +101,7 @@ def criar_nova_colecao():
     return criar_colecao(colecao)
 
 
-@main.route("/delete_colection/<int:colection_id>", methods=["DELETE"])
+@main.route("/deletar_colecao/<int:colection_id>", methods=["DELETE"])
 @jwt_required()
 def delete_colection_route(colection_id):
     user_jwt = int(get_jwt_identity())

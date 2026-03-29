@@ -3,7 +3,7 @@
   "info": {
     "title": "Library Backend API",
     "version": "1.0.0",
-    "description": "API para gerenciamento de usuários, coleções e livros favoritos com autenticação JWT"
+    "description": "API para gerenciamento de usuarios, colecaes e livros favoritos com autenticacao JWT"
   },
   "host": "127.0.0.1:5000",
   "basePath": "/",
@@ -12,24 +12,24 @@
   "tags": [
     {
       "name": "Auth",
-      "description": "Autenticação de usuários"
+      "description": "Autenticacaoo de usuarios"
     },
     {
-      "name": "Coleções",
-      "description": "Gerenciamento de coleções"
+      "name": "Colecoes",
+      "description": "Gerenciamento de colecoes"
     },
     {
-      "name": "Favoritos",
-      "description": "Gerenciamento de livros favoritos"
+      "name": "Livros",
+      "description": "Gerenciamento de livros"
     }
   ],
 
   "securityDefinitions": {
     "BearerAuth": {
       "type": "apiKey",
-      "name": "Authorization",
+      "name": "autorizacao",
       "in": "header",
-      "description": "Digite: Bearer {seu_token}"
+      "description": "Cole o {seu_token}"
     }
   },
 
@@ -58,54 +58,55 @@
         "autor": { "type": "string" },
         "capa": { "type": "string" }
       }
+    },
+    "Colecao": {
+      "type": "object",
+      "properties": {
+        "nome": { "type": "string" }     
+      }
     }
-  },
+    },
+
 
   "paths": {
-
     "/login": {
-      "post": {
-        "tags": ["Auth"],
-        "summary": "Autenticar usuário",
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": { "$ref": "#/definitions/Login" }
+    "post": {
+      "tags": ["Auth"],
+      "summary": "Autenticar usuario",
+      "consumes": ["application/json"],
+      "produces": ["application/json"],
+      "parameters": [
+        {
+          "name": "body",
+          "in": "body",
+          "required": true,
+          "schema": { "$ref": "#/definitions/Login" }
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Login realizado",
+          "schema": {
+            "type": "object",
+            "properties": {
+              "status": { "type": "string" },
+              "usuario_id": { "type": "integer" },
+              "nome": { "type": "string" },
+              "autorizacao": { "type": "string" }}
+            
           }
-        ],
-        "responses": {
-        
-            "200": {
-            "description": "Login realizado",
-            "schema": {
-                "type": "object",
-                "properties": {
-                "status": { "type": "string" },
-                "usuario_id": { "type": "integer" },
-                "nome": { "type": "string" },
-                "autorizacao": { "type": "string" }
-                }
-            },
-            "examples": {
-                "application/json": {
-                "status": "ok",
-                "usuario_id": 1,
-                "nome": "Alice",
-                "autorizacao": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
-                }
-            }
-            },
-          "401": { "description": "Credenciais inválidas" }
         }
       }
+    }
     },
 
     "/cadastro": {
       "post": {
         "tags": ["Auth"],
-        "summary": "Cadastrar usuário",
+        "summary": "Cadastrar usuario",
+        "produces": [
+          "application/json"
+          ],
         "parameters": [
           {
             "name": "body",
@@ -115,28 +116,28 @@
           }
         ],
         "responses": {
-          "201": { "description": "Usuário criado" },
-          "400": { "description": "Erro de validação" }
+          "201": { "description": "Usuario criado" },
+          "400": { "description": "Erro de validacao" }
         }
       }
     },
 
-    "/colections": {
+    "/mostrar_colecao": {
       "get": {
-        "tags": ["Coleções"],
-        "summary": "Listar coleções do usuário",
+        "tags": ["Colecoes"],
+        "summary": "Listar colecaes do usuario",
         "security": [{ "BearerAuth": [] }],
         "responses": {
-          "200": { "description": "Lista de coleções" },
-          "401": { "description": "Não autorizado" }
+          "200": { "description": "Lista de colecoes" },
+          "401": { "description": "Nao autorizado" }
         }
       }
     },
 
     "/nova_colecao": {
       "post": {
-        "tags": ["Coleções"],
-        "summary": "Criar nova coleção",
+        "tags": ["Colecoes"],
+        "summary": "Criar nova colecao",
         "security": [{ "BearerAuth": [] }],
         "parameters": [
           {
@@ -152,14 +153,34 @@
           }
         ],
         "responses": {
-          "201": { "description": "Coleção criada" }
+          "201": { "description": "Colecao criada" }
         }
       }
     },
 
-    "/add_favoritos/{colection_id}": {
+    "/deletar_colecao/{colection_id}": {
+      "delete": {
+        "tags": ["Colecoes"],
+        "summary": "Remover colecao",
+        "security": [{ "BearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "colection_id",
+            "in": "path",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": { "description": "Coleaoo removida" },
+          "404": { "description": "Nao encontrada" }
+        }
+      }
+    },
+
+    "/add_livro/{colection_id}": {
       "post": {
-        "tags": ["Favoritos"],
+        "tags": ["Livros"],
         "summary": "Adicionar livro aos favoritos",
         "security": [{ "BearerAuth": [] }],
         "parameters": [
@@ -184,10 +205,10 @@
       }
     },
 
-    "/delete_colecao/{colection_id}": {
-      "delete": {
-        "tags": ["Coleções"],
-        "summary": "Remover coleção",
+    "/mostrar_livros/{colection_id}": {
+      "get": {
+        "tags": ["Livros"],
+        "summary": "Listar livros favoritos de uma coleção",
         "security": [{ "BearerAuth": [] }],
         "parameters": [
           {
@@ -198,10 +219,13 @@
           }
         ],
         "responses": {
-          "200": { "description": "Coleção removida" },
-          "404": { "description": "Não encontrada" }
+          "200": { "description": "Lista de livros" },
+          "403": { "description": "Não autorizado" },
+          "404": { "description": "Coleção não encontrada" }
         }
       }
     }
+
+    
   }
 }
