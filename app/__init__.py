@@ -14,6 +14,7 @@ def create_app():
     Base.metadata.create_all(bind=engine)
 
     app.config["JWT_SECRET_KEY"] = "chave-super-secreta-que-nem-eu-mesmo-sei"
+    app.config["JWT_HEADER_NAME"] = "autorizacao"	
     jwt.init_app(app)
     with open("./doc/swagger.json") as f:
         swagger_template = json.load(f)

@@ -102,9 +102,9 @@ def autenticar_usuario(usuario):
             print(f"\nO token desta operação é {token}")
 
             return jsonify({"status": "ok", 
-                            # "usuario_id": usuario_db.usuario_id, 
-                            # "nome": usuario_db.nome,  
-                            "Autorization":token}),200
+                            "usuario_id": usuario_db.usuario_id, 
+                            "nome": usuario_db.nome,  
+                            "autorizacao": "Bearer "+ token}),200
             
                 
     except Exception as e:
