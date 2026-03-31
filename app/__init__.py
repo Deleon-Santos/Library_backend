@@ -21,21 +21,12 @@ def create_app():
 
     Swagger(app, template=swagger_template)
     
-    CORS(
-        app,
-        resources={r"/*": {
-            "origins": "*"
-            # [
-            #     "https://deleon-santos.github.io",
-            #     "http://127.0.0.1:5500",
-            #     "http://localhost:5500",
-            #     "http://localhost:5000/apidocs/"
-            # ],
-            
-        }},
-        
-        supports_credentials=True
-    )
+    CORS(app, resources={r"/*": {
+        "origins": ["http://localhost:5000", "http://127.0.0.1:5500", "https://deleon-santos.github.io"],
+        "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+        "allow_headers": ["Content-Type", "Authorization", "autorizacao"],
+        "expose_headers": ["Content-Type", "autorizacao"]
+    }}, supports_credentials=True)
     seed_db()
     
-    return app
+    return app 

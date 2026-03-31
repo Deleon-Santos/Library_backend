@@ -91,8 +91,7 @@ def autenticar_usuario(usuario):
             
             senha_valida = bcrypt.checkpw(
                 usuario.senha.encode("utf-8"),
-                usuario_db.senha.encode("utf-8")
-            )
+                usuario_db.senha.encode("utf-8"))
 
             if not senha_valida:
                 return jsonify({"error": "Credenciais inválidas"}), 401
@@ -105,8 +104,7 @@ def autenticar_usuario(usuario):
                             "usuario_id": usuario_db.usuario_id, 
                             "nome": usuario_db.nome,  
                             "autorizacao": "Bearer "+ token}),200
-            
-                
+                         
     except Exception as e:
         return jsonify({"error": str(e)}), 500
     
