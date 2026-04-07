@@ -27,7 +27,7 @@ def login():
     
 
 @main.route("/cadastro", methods=["POST"])
-def cadastrar_usuaario():
+def cadastrar_usuario():
 
     data = request.get_json()
     if not data.get("email") or not data.get("senha"):
@@ -93,14 +93,16 @@ def criar_nova_colecao():
     user_jwt = int(get_jwt_identity())
     if not user_jwt:
         return jsonify({"erro":"Autor não indentificado"}),401
+
     data = request.get_json()
-    if not data.get("nome",):
+    if not data.get("nome"):
         return jsonify({"erro":"Nome da coleção não foi informado"})
+
     colecao = Colecao(
         nome = data["nome"],
         usuario_id = user_jwt
     )
-    return criar_colecao(colecao)
+    return criar_colecao(colecao, user_jwt)
 
 
 @main.route("/deletar_colecao/<int:colection_id>", methods=["DELETE"])

@@ -122,11 +122,17 @@ def novo_cadastro_usuario(novo_usuario):
         return jsonify({"error": str(e)}), 500
     
 
-def criar_colecao(colecao):
+def criar_colecao(colecao, user_jwt):
     try: 
         with Session() as session:
-            if session.query(Colecao).filter_by(nome=colecao.nome).first():
-                return jsonify({"error": "Coleção já existe"}), 400
+            colecao_existente = session.query(Colecao).filter_by(
+    		nome=colecao["nome"],
+    		usuario_id=user_jwt
+		).first()
+
+            if colecao_existente:
+                return jsonify({"error": "Você já possui uma coleção com esse nome"}), 400
+
             session.add (colecao)
             session.commit()
             session.refresh(colecao)
