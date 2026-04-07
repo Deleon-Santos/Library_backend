@@ -113,3 +113,11 @@ def delete_colection_route(colection_id):
         return jsonify({"erro":"Autor não indentificado"}),401
     return excluir_colection(colection_id, user_jwt)
 
+
+@main.route("/deletar_livro/<int:livro_id>", methods=["DELETE"])
+@jwt_required()
+def deletar_livro(livro_id):
+    user_jwt = int(get_jwt_identity())
+    if not user_jwt:
+        return jsonify({"erro":"Autor não indentificado"}),401
+    return excluir_colection(livro_id, user_jwt)

@@ -1,7 +1,7 @@
 import bcrypt
 from flask import jsonify
 from app.data.config_db import Session
-from app.model.models import  Colecao, Usuario
+from app.model.models import  Colecao, Livro, Usuario
 from flask_jwt_extended import create_access_token
 
 
@@ -154,3 +154,14 @@ def excluir_colection(colection_id, user_jwt):
             return jsonify({"error": str(e)}), 500
         
 
+def excluir_livro(livro_id, user_jwt):
+    with Session() as session:
+        try:
+            livro_descartado = session.query(Livro).filter_by(livro_id=livro_id, usuario_id=user_jwt).first()
+            if not livro_descartado:
+                return jsonify({"error": "Livro não encontrado"}), 404
+            session.delete(livro_descartado)
+            session.commit()
+            return jsonify({"ok": "Livro removido!"}), 200
+        except Exception as e:
+            return jsonify({"error": str(e)}), 500
