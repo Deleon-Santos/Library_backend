@@ -224,8 +224,27 @@
           "404": { "description": "Coleção não encontrada" }
         }
       }
-    }
+    },
 
+    "/deletar_livro/{livro_id}": {
+      "delete": {
+        "tags": ["Livros"],
+        "summary": "Remover livro dos favoritos",
+        "security": [{ "BearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "livro_id",
+            "in": "path",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": { "description": "Livro removido" },
+          "404": { "description": "Livro não encontrado" }
+        }
+      }
+    }
     
   }
 }

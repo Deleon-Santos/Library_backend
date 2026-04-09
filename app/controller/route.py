@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, render_template, request
 from app.model.models import Colecao, Livro, Usuario
-from app.service.services import  adicionar_novo_livro, autenticar_usuario, criar_colecao, excluir_colection, novo_cadastro_usuario, pegar_colections, pegar_favoritos
+from app.service.services import  adicionar_novo_livro, autenticar_usuario, criar_colecao, excluir_colection, excluir_livro, novo_cadastro_usuario, pegar_colections, pegar_favoritos
 from flask_jwt_extended import jwt_required, get_jwt_identity
 
 import bcrypt
@@ -120,4 +120,4 @@ def deletar_livro(livro_id):
     user_jwt = int(get_jwt_identity())
     if not user_jwt:
         return jsonify({"erro":"Autor não indentificado"}),401
-    return excluir_colection(livro_id, user_jwt)
+    return excluir_livro(livro_id, user_jwt)

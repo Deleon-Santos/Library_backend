@@ -157,7 +157,7 @@ def excluir_colection(colection_id, user_jwt):
 def excluir_livro(livro_id, user_jwt):
     with Session() as session:
         try:
-            livro_descartado = session.query(Livro).filter_by(livro_id=livro_id, usuario_id=user_jwt).first()
+            livro_descartado = session.query(Livro).filter_by(livro_id=livro_id).first()
             if not livro_descartado:
                 return jsonify({"error": "Livro não encontrado"}), 404
             session.delete(livro_descartado)
