@@ -126,7 +126,7 @@ def criar_colecao(colecao, user_jwt):
     try: 
         with Session() as session:
             colecao_existente = session.query(Colecao).filter_by(
-    		nome=colecao["nome"],
+    		nome=colecao.nome,
     		usuario_id=user_jwt
 		).first()
 
