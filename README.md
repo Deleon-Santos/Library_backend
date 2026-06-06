@@ -1,7 +1,7 @@
 
 # 📚 Library Back-end: Sistema de Gerenciamento de Coleções
-![imagen](./img/bar.png)
-
+![imagen](capa.png)
+# Swagger 👉 [Acessar Deploy](https://library-backend-b4as.onrender.com/apidocs) 👈
 
 
 
