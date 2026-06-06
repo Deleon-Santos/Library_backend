@@ -5,7 +5,7 @@
     "version": "1.0.0",
     "description": "API para gerenciamento de usuarios, colecaes e livros favoritos com autenticacao JWT"
   },
-  "host": "library-backend-b4as.onrender.com",
+  
   "basePath": "/",
   "schemes": ["https"],
 
