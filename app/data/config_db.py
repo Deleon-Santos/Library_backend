@@ -10,7 +10,8 @@ load_dotenv()
 
 DATABASE_URL = os.getenv("DATABASE_URL")
 
-if DATABASE_URL and DATABASE_URL.startswith("postgres://", 1):
+#if 
+DATABASE_URL and DATABASE_URL.startswith("postgres://", 1):
     DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
 
     engine = create_engine(
@@ -19,9 +20,9 @@ if DATABASE_URL and DATABASE_URL.startswith("postgres://", 1):
         pool_size=5,
         max_overflow=10
     )
-else:
+"""else:
 
-    engine = create_engine("sqlite:///db.library" , echo= True)
+    engine = create_engine("sqlite:///db.library" , echo= True)"""
 Session = sessionmaker(bind=engine) 
 Base = declarative_base()
 
