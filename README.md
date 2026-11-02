@@ -1,7 +1,7 @@
 
 # 📚 Library Back-end: Sistema de Gerenciamento de Coleções
 ![imagen](capa.png)
-# Swagger 👉 [Acessar Deploy](https://checlist-web-latest.onrender.com/) 👈
+# Swagger 👉 [Acessar Deploy](https://library-backend-1-0zpr.onrender.com/apidocs/) 👈
 
 
 
